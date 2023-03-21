@@ -41,7 +41,7 @@ function validateGateway(gateway) {
     serialNumber: Joi.string().required(),
     name: Joi.string().required(),
     ipAddress: Joi.string().ip().required(),
-    devices: Joi.array().required(),
+    devices: Joi.array().max(10).required(),
   });
   return schema.validate(gateway);
 }

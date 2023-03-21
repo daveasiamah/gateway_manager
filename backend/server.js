@@ -9,27 +9,15 @@ const app = express();
 //connect to the database
 connectDB();
 
+//Cross Origin Resource Sharing Controls
+app.use(cors({ origin: "https://gateway-manager.vercel.app" }));
+
 //Loading endpoints
 const gateways = require("./routes/api/gateways");
 const devices = require("./routes/api/devices");
 
 //Logging Requests to Server
 app.use(morgan("dev"));
-
-//Cross Origin Resource Sharing Controls
-app.use(cors());
-
-// Access Controls
-app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Credentials", true);
-  res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin,X-Requested-With,Content-Type,Accept,content-type,application/json"
-  );
-  next();
-});
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -61,5 +49,7 @@ app.all("*", (req, res) => {
   return res.sendStatus(404);
 });
 
-const port = process.env.PORT || 7000;
+const port = process.env.NODE_ENV === "test" ? 4000 : 7000;
 app.listen(port, () => console.log(`Server started on port ${port}`));
+
+module.exports = app;

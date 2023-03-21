@@ -15,7 +15,6 @@ async function getAllGateways(req, res, next) {
 
     res.status(200).json(gateways);
   } catch (err) {
-    console.log(err);
     next(err);
   }
 }
@@ -32,7 +31,6 @@ async function getGateway(req, res, next) {
     if (!gateway) return res.status(404).send("Gateway not found.");
     res.status(200).json(gateway);
   } catch (error) {
-    console.log(err);
     next(err);
   }
 }
@@ -55,10 +53,12 @@ async function createGateway(req, res, next) {
     }
 
     if (devices.length > 10) {
-      throw createError(
-        400,
-        "No more than 10 devices are allowed for a gateway"
-      );
+      res
+        .status(400)
+        .json({ message: "No more than 10 devices are allowed for a gateway" });
+      throw createError(400, {
+        message: "No more than 10 devices are allowed for a gateway",
+      });
     }
 
     const gateway = await Gateway.create({
@@ -70,7 +70,6 @@ async function createGateway(req, res, next) {
 
     res.status(201).json(gateway);
   } catch (error) {
-    console.error(error);
     next(error);
   }
 }
@@ -94,7 +93,6 @@ async function updateGateway(req, res, next) {
 
     res.status(200).json({ data: updatedGateway });
   } catch (error) {
-    console.log(error);
     next(error);
   }
 }
@@ -121,7 +119,6 @@ async function deleteDeviceFromGateway(req, res, next) {
 
     res.status(200).json({ data: updatedGateway });
   } catch (error) {
-    console.log(error);
     next(error);
   }
 }
